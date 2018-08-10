@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
     public float speed;
+    public Text score;
+    public Text endOfGameText;
     private Rigidbody rb;
+    private int pointCounter;
+    private int initialQuantityOfItems;
 
     void Start ()
     {
         rb = GetComponent<Rigidbody>();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(other.gameObject);
+        pointCounter = 0;
+        UpdateScore();
+        endOfGameText.gameObject.SetActive(false);
+        initialQuantityOfItems = CountItems();
     }
 
     void FixedUpdate ()
@@ -25,4 +29,32 @@ public class PlayerController : MonoBehaviour {
 
         rb.AddForce(movement * speed);
     }
+
+    private void OnTriggerEnter (Collider other)
+    {
+        Destroy(other.gameObject);
+        pointCounter++;
+        UpdateScore();
+
+        if (IsEndOfGame())
+        {
+            endOfGameText.gameObject.SetActive(true);
+        }
+    }
+
+    private void UpdateScore ()
+    {
+        score.text = "Points: " + pointCounter;
+    }
+
+    private int CountItems()
+    {
+        return GameObject.FindGameObjectsWithTag("Item").Length;
+    }
+
+    private bool IsEndOfGame()
+    {
+        return pointCounter >= initialQuantityOfItems; 
+    }
+
 }
