@@ -11,6 +11,11 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(other.gameObject);
+    }
+
     void FixedUpdate ()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
